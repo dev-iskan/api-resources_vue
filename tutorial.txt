@@ -1,0 +1,57 @@
+lesson 1 {
+    Registering user:
+        we use postman to see our api queries, before using any kind of requests we have to set in headers:
+            key: Accept value:  application/json
+            key: Content-Type  value: application/json
+        so laravel could response as json
+
+        create RegisterController and StoreUserRequest to validate data, and add post route to registering users
+
+    Authenticating users:
+        we user laravel passport to authenticate users:
+        composer require laravel/passport=~4.0 for verison 5.5 of laravel
+
+        then migrate
+
+        php artisan passport:install
+
+        add hasapitoken trait to User model
+
+        add Passport::routes(); to AuthServiceProvider boot() method
+
+        change in config/auth.php guards to passport:
+            'api' => [
+                'driver' => 'passport',
+                'provider' => 'users',
+            ],
+
+        Now we can send request through postman, for this via post method, we send data to ~/oauth/token:
+            {
+            	"grant_type" : "password",
+            	"client_id" : "2",
+            	"client_secret" : "pleyGHlump3nduFIh5LwxNj7VZ7QgUA3idAOWxo1",
+            	"username" : "admin@co.com",
+            	"password" : "123456",
+            	"scope" : "*"
+            }
+
+        Then we can access /api/user, but before Postman allows us to save variables depending on Environment,
+        thus add several environments depending on different users and there save authorization variable with access_token
+        of exactly that user:
+            [{"key":"Authorization","value":"Bearer eyJ0eXAiOiJKV1Q
+            iLCJhbGciOiJSUzI1NiIsImp0aSI6IjJlMzljZGFkODA1NWU1OWE5NzA1MTRhNmMwYTY2MDVkMTU3NWQ5OTRkNDNkMTk5NmMzYTc2YjRmYzUyO
+            DEyZjkyYjlmZmYyOWNiNjM0NTVlIn0.eyJhdWQiOiIyIiwianRpIjoiMmUzOWNkYWQ4MDU1ZTU5YTk3MDUxNGE2YzBhNjYwNWQxNTc1ZDk5
+            NGQ0M2QxOTk2YzNhNzZiNGZjNTI4MTJmOTJiOWZmZjI5Y2I2MzQ1NWUiLCJpYXQiOjE1Mzc3MTIyNzYsIm5iZiI6MTUzNzcxMjI3NiwiZXhwIj
+            oxNTY5MjQ4Mjc2LCJzdWIiOiIyIiwic2NvcGVzIjpbIioiXX0
+            .Du8I0Wbmcq0rOIHrpSZ75chn83vF5fxhW9tNw8MUmqGoopZdUxokmZ2BudoNWxQ3eI6vLODvg6Rffj5HdMX
+            -5xl_8_Ljail89Jy-
+            XNjFxq9FuC8E_gceClUkWfCmltd5JKb-ZRXdfyKtSeT-
+            Z1l4iESRWrKQc4YKohF8dRiu2NMNVuZfYRlxxc6CwLOkNItT44h4HDP3sR2gh_nEhuLdG8yo9VEw4cEBoSmGNByYte_uxa
+            YXsPRLnNQjMMNl-Zq2qmCJNBu8t_Y0mX3KbPrcZOYN17VyLjIyDbboxatLZjDsYFaTnvUiPuh30nPcpjWp1H0I4hyb
+            RLHL0AH3n8zW1zXO3_DTFfw8tJgtfQlqW6SEZGxNxP5MHPLky1yYisGmRTLEMdGkfiwXfIbAZf7f_Iqf5mAX0xdWL9PKQvn5yXMX_h49AtktYJt-
+            8PV9P5ZNqqezzDLobrTZ8Mup5iFats0CIEBHOCiOvTPUOH1pNiuhss7nx-M1pKDyzaSmgBaPDAhfIxwNHe49u9GlKMdhzf
+            5v4amJl9nKTd23FQ0vbl3RI0R8NixYNZ5MhsqQG8CHyoiy8qG02wGPCJRHCEKKncGXVm0xWs7agVa-eMJzxJmyFXsW
+            0msrY7tF07p-Jxif-NCIMBNp5cFdxnLWfigRNYBenOCf6qNLhMxtYpN7T4k"}]
+
+        then we can access api/user
+}

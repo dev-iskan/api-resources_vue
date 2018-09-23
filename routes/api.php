@@ -13,9 +13,13 @@ use Illuminate\Http\Request;
 |
 */
 
+
+Route::resource('articles', 'ArticleController');
+
+
+//Lesson API
+Route::post('/register', 'RegisterController@register');
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-
-Route::resource('articles', 'ArticleController');
