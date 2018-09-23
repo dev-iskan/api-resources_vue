@@ -35,4 +35,7 @@ class User extends Authenticatable
     public function ownsTopic(Topic $topic) {
         return $this->id === $topic->user->id;
     }
+    public function ownsPost(Post $post) {
+        return $this->id === $post->user->id;
+    }
 }

@@ -157,3 +157,29 @@ lesson 3 {
                 return response(null, 204); //successful but no content
             }
 }
+
+lesson 3 {
+    Creating posts:
+        we think about url structure and it will be like: api/topics/{topic}/posts/... thus we create post group inside
+        topic group:
+            Route::group(['prefix'=>'topics'], function () {
+                Route::get('/', 'TopicController@index');
+                Route::get('/{topic}', 'TopicController@show');
+                Route::post('/', 'TopicController@store')->middleware('auth:api');
+                Route::patch('/{topic}', 'TopicController@update')->middleware('auth:api');
+                Route::delete('/{topic}', 'TopicController@destroy')->middleware('auth:api');
+
+                Route::group(['prefix'=>'/{topic}/posts'], function () {
+                    Route::post('/', 'PostController@store')->middleware('auth:api');
+                });
+            });
+
+        then we create request, controller and ...
+
+    Updating post:
+        same as topics update
+
+    Deleting post:
+        same as topics delete
+
+}
