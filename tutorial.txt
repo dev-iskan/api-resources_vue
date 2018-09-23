@@ -55,3 +55,19 @@ lesson 1 {
 
         then we can access api/user, by adding headers like before and also Authentication with value {{Authentication}}
 }
+
+
+lesson 2 {
+    Use fractal:
+    composer require spatie/laravel-fractal
+
+    then we can create special folder for transformers and there let's create UserTransformer class where we will
+    transform user model before returning (see UserTransformer)
+
+    then in RegisterController we can return user using fractal:
+        return fractal()
+            ->item($user)
+            ->transformWith(new UserTransformer())
+            ->toArray();
+
+}
