@@ -53,5 +53,5 @@ lesson 1 {
             5v4amJl9nKTd23FQ0vbl3RI0R8NixYNZ5MhsqQG8CHyoiy8qG02wGPCJRHCEKKncGXVm0xWs7agVa-eMJzxJmyFXsW
             0msrY7tF07p-Jxif-NCIMBNp5cFdxnLWfigRNYBenOCf6qNLhMxtYpN7T4k"}]
 
-        then we can access api/user
+        then we can access api/user, by adding headers like before and also Authentication with value {{Authentication}}
 }
