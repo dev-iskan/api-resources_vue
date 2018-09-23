@@ -69,5 +69,91 @@ lesson 2 {
             ->item($user)
             ->transformWith(new UserTransformer())
             ->toArray();
+}
 
+
+lesson 3 {
+    Create topics:
+        create topics and posts models and migrations setting up relationships, create StoreTopicRequest and Controller
+        add api route to group of topics test postman '/api/topics' with method=post
+
+    Transform posts and topics:
+        let's create transformers for topic and posts and in order to get related data in our case it is user and posts
+        we need to do next:
+            in topics transformer:
+            add available includes:
+                protected $availableIncludes = ['user', 'posts'];
+            then also add methods to include thems:
+                public function includeUser(Topic $topic) {
+                    return $this->item($topic->user, new UserTransformer());
+                }
+
+                public function includePosts(Topic $topic) {
+                    return $this->collection($topic->posts, new  PostTransformer());
+                }
+
+            in topic controller:
+                return fractal()
+                    ->item($topic)
+                    ->parseIncludes(['user', 'posts.user']) //this method will include user and posts with deep include of user
+                    ->transformWith(new TopicTransformer())
+                    ->toArray();
+
+    Topic index:
+        we can also paginate our topics, showing all topics can be done with method index in topic controller
+            public function index() {
+                $topics = Topic::latestFirst()->paginate(3); // get topics by 3
+                $topicsCollection = $topics->getCollection(); //create collection of topics in current page
+                return fractal()
+                    ->collection($topicsCollection) // return collection
+                    ->parseIncludes(['user'])
+                    ->transformWith(new TopicTransformer())
+                    ->paginateWith(new IlluminatePaginatorAdapter($topics)) //pagination is created by PaginatorAdaptor
+                    ->toArray();
+            }
+
+    Showing single topic
+        create route and create method show in controller with same logic as in store method:
+            public function show (Topic $topic) {
+                return fractal()
+                    ->item($topic)
+                    ->parseIncludes(['user', 'posts.user'])
+                    ->transformWith(new TopicTransformer())
+                    ->toArray();
+            }
+
+    Updating topic
+        create api route::patch and actually patch means editing content while put means change absolutelly,
+        method update in controller :
+            public function update(UpdateTopicRequest $request, Topic $topic) {
+                $this->authorize('update', $topic);
+
+                $topic->title = $request->get('title', $topic->title);
+                $topic->save();
+
+                return fractal()
+                    ->item($topic)
+                    ->parseIncludes(['user'])
+                    ->transformWith(new TopicTransformer())
+                    ->toArray();
+            }
+        here it is seen we use policy TopicPolicy and authorized it in AuthSeviceProvider, TopicPolicy method update:
+            public function update(User $user, Topic $topic) {
+                return $user->ownsTopic($topic);
+            }
+        And User model:
+            public function ownsTopic(Topic $topic) {
+                return $this->id === $topic->user->id;
+            }
+        which means only creator of topic can edit topics
+
+    Delete topic:
+        api route, method in controller, same policy to check authentication:
+            public function destroy(Topic $topic){
+                $this->authorize('destroy', $topic);
+
+                $topic->delete();
+
+                return response(null, 204); //successful but no content
+            }
 }

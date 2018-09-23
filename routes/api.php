@@ -23,3 +23,11 @@ Route::post('/register', 'RegisterController@register');
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::group(['prefix'=>'topics'], function () {
+    Route::get('/', 'TopicController@index');
+    Route::get('/{topic}', 'TopicController@show');
+    Route::post('/', 'TopicController@store')->middleware('auth:api');
+    Route::patch('/{topic}', 'TopicController@update')->middleware('auth:api');
+    Route::delete('/{topic}', 'TopicController@destroy')->middleware('auth:api');
+});
