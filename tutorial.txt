@@ -198,3 +198,32 @@ lesson 4 {
 
 
 }
+
+lesson 5 {
+
+    Fixing responses errors
+
+    in Exceptions\Handler.php
+        if($request->expectsJson()) {
+            if ($exception instanceof AuthorizationException) {
+                return response()->json([
+                    'data'=>[
+                        'error'=>'Unauthorized!'
+                    ]
+                ], 403);
+            }
+            if ($exception instanceof ModelNotFoundException) {
+                $modelClass = explode('\\' ,$exception->getModel());
+                return response()->json([
+                    'data'=>[
+                        'error'=> end($modelClass).' not found!'
+                    ]
+                ], 404);
+            }
+            if ($exception instanceof NotFoundHttpException) {
+                return response(null, 404);
+            }
+
+        }
+
+}
