@@ -188,6 +188,13 @@ lesson 3 {
 lesson 4 {
 
     Likes, setting:
+        we create migration and model as Polymorphic relations between likes and posts and also likes have their user
+
+        next we create api route and controller and policy rule in PostPolicies
+
+        we create method store which will add row to db that on some posts users pressed likes and one user can
+        like only one time, also creator cannot like at all.
+
 
 
 }
